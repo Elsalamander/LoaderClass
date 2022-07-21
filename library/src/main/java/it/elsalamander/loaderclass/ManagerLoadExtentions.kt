@@ -2,12 +2,14 @@ package it.elsalamander.loaderclass
 
 import android.app.Activity
 import android.content.Intent
+import android.graphics.BitmapFactory
+import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.util.Log
 import androidx.activity.result.ActivityResult
+import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import dalvik.system.DexClassLoader
 import dalvik.system.PathClassLoader
 import it.elsalamander.loaderclass.exception.EstensioneNotFound
 import it.elsalamander.loaderclass.exception.ExtensionClassNotFound
@@ -15,7 +17,7 @@ import it.elsalamander.loaderclass.exception.InvalidJSONDesc
 import org.json.JSONException
 import org.json.JSONObject
 import java.io.File
-import java.lang.ClassCastException
+import java.io.InputStream
 import java.util.*
 
 
@@ -57,11 +59,72 @@ class ManagerLoadExtentions(val activity : AppCompatActivity) {
     }
 
     val extentions = TreeMap<String, Pair<JSONObject, AbstractLoadClass>>()
+    val startForResult : ActivityResultLauncher<Intent>
+    lateinit var pathClassLoader : PathClassLoader
 
 
     init{
         //carica tutte le estensioni presenti
         this.loadAllExtension(File(activity.filesDir, PATH_FOLDER_EXTENSION))
+
+        startForResult = activity.registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+                result: ActivityResult ->
+
+            if (result.resultCode == Activity.RESULT_OK) {
+                //ho il pick
+                val uri: Uri = result.data?.data!!
+
+                //crea una copia nella cartella di cache
+                var tmp = File(activity.filesDir,  "cache")
+                Log.d("PICK",   tmp.path)
+                tmp.mkdirs()
+                tmp = File(tmp, "temp.apk")
+                tmp.createNewFile()
+                Util.copyStreamToFile(activity.contentResolver.openInputStream(uri)!!, tmp)
+
+                //verifica che l'apk ha la firma giusta per fare da estensione
+                //deve avere nelle resources il file "Estensione.xml"
+                //uso il loader per caricare l'apk
+                pathClassLoader = PathClassLoader(tmp.path, null, activity.classLoader)
+
+                //ottieni l'inputStream del file di descrizione
+                try{
+                    //carica il file di descrizione
+                    val desc = this.getEstensioneJson(pathClassLoader)
+
+                    if(!this.checkJSONDesc(desc)){
+                        throw InvalidJSONDesc("Contenuto del file di estensione non valido")
+                    }
+
+                    //carica la classe main dell'estensione
+                    val cl = this.getExtensionClass(pathClassLoader, desc)
+
+                    //se sono qua è tutto ok
+                    //il file apk in questione è una estensione valida
+
+
+                    //ora carica l'estensione
+                    this.loadExtension(this.moveToExtensionFolder(tmp, desc))
+
+                }catch(e : EstensioneNotFound){
+                    e.printStackTrace()
+                    return@registerForActivityResult
+                }catch(e : ExtensionClassNotFound){
+                    e.printStackTrace()
+                    return@registerForActivityResult
+                }catch(e : InvalidJSONDesc){
+                    e.printStackTrace()
+                    return@registerForActivityResult
+                }finally{
+                    //in ogni caso alla fine elimina il file
+                    tmp.delete()
+                }
+            }
+        }
+    }
+
+    fun getClassLoader(): PathClassLoader {
+        return pathClassLoader
     }
 
     /**
@@ -91,79 +154,36 @@ class ManagerLoadExtentions(val activity : AppCompatActivity) {
      */
     private fun loadExtension(file: File?) {
         //crea il loader
-        val loader = PathClassLoader(file!!.path, null, activity.classLoader)
+        pathClassLoader = PathClassLoader(file!!.path, null, activity.classLoader)
 
         //ottieni il file JSON
-        val json = this.getEstensioneJson(loader)
+        val json = this.getEstensioneJson(pathClassLoader)
 
         //ottieni la classe
-        val cl = this.getExtensionClass(loader, json)
+        val cl = this.getExtensionClass(pathClassLoader, json)
 
         //inserisci nella mappa
-        this.extentions[json.getString(DESC_PATH_NAME)] = Pair(json, cl.newInstance())
+        this.extentions[json.getString(DESC_PATH_NAME)] = Pair(json, instanceExtension(cl, pathClassLoader))
+    }
+
+    /**
+     * Carica la classe e altre cose di contorno
+     */
+    fun instanceExtension(cl :  Class<out AbstractLoadClass>, loader : ClassLoader) : AbstractLoadClass{
+        val tmp = cl.newInstance()
+
+        val f: InputStream = loader.getResourceAsStream("res/drawable-v24/icona.png")
+        tmp.setImage(BitmapFactory.decodeStream(f))
+
+        return tmp
     }
 
     /**
      * Carica una nuova estensione dalla cartella "Download"
      */
     fun loadNewExtension(){
-        val startForResult = activity.registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-            result: ActivityResult ->
-
-                if (result.resultCode == Activity.RESULT_OK) {
-                    //ho il pick
-                    val uri: Uri = result.data?.data!!
-
-                    //crea una copia nella cartella di cache
-                    var tmp = File(activity.filesDir,  "cache")
-                    Log.d("PICK",   tmp.path)
-                    tmp.mkdirs()
-                    tmp = File(tmp, "temp.apk")
-                    tmp.createNewFile()
-                    Util.copyStreamToFile(activity.contentResolver.openInputStream(uri)!!, tmp)
-
-                    //verifica che l'apk ha la firma giusta per fare da estensione
-                    //deve avere nelle resources il file "Estensione.xml"
-                    //uso il loader per caricare l'apk
-                    val loader = PathClassLoader(tmp.path, null, activity.classLoader)
-
-                    //ottieni l'inputStream del file di descrizione
-                    try{
-                        //carica il file di descrizione
-                        val desc = this.getEstensioneJson(loader)
-
-                        if(!this.checkJSONDesc(desc)){
-                            throw InvalidJSONDesc("Contenuto del file di estensione non valido")
-                        }
-
-                        //carica la classe main dell'estensione
-                        val cl = this.getExtensionClass(loader, desc)
-
-                        //se sono qua è tutto ok
-                        //il file apk in questione è una estensione valida
-
-
-                        //ora carica l'estensione
-                        this.loadExtension(this.moveToExtensionFolder(tmp, desc))
-
-                    }catch(e : EstensioneNotFound){
-                        e.printStackTrace()
-                        return@registerForActivityResult
-                    }catch(e : ExtensionClassNotFound){
-                        e.printStackTrace()
-                        return@registerForActivityResult
-                    }catch(e : InvalidJSONDesc){
-                        e.printStackTrace()
-                        return@registerForActivityResult
-                    }finally{
-                        //in ogni caso alla fine elimina il file
-                        tmp.delete()
-                    }
-                }
-        }
-
         val inte = Intent(Intent.ACTION_OPEN_DOCUMENT)
-        inte.setType("*/*")
+        inte.type = "*/*"
         startForResult.launch(inte)
     }
 

@@ -75,7 +75,7 @@ class ManagerShareClass(private val context : Context, private val loadClass : A
         val tmp = JSONObject()
 
         //informazioni aggiuntive
-        this.loadClass?.addInfoToSharedFile(tmp)
+        //this.loadClass?.addInfoToSharedFile(tmp)
 
         //informazioni necessarie:
         //path package

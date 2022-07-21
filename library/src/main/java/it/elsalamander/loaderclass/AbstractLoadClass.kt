@@ -1,5 +1,12 @@
 package it.elsalamander.loaderclass
 
+import android.content.Context
+import android.graphics.Bitmap
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentManager
+import androidx.navigation.NavController
+import androidx.navigation.NavGraph
+import dalvik.system.PathClassLoader
 import it.elsalamander.loaderclass.calculator.Operation
 import it.elsalamander.loaderclass.calculator.data.OperationDataHelper
 import it.elsalamander.loaderclass.calculator.data.OperationDataParameters
@@ -16,13 +23,45 @@ import org.json.JSONObject
  * @data: 13 luglio 2022
  * @version: v1.0
  ****************************************************************/
-abstract class AbstractLoadClass : Operation(){
+abstract class AbstractLoadClass(private val operation: Operation) {
+
+    lateinit var img : Bitmap
 
     /**
-     * Aggiungi informazioni al file JSON in condivisione
-     *
-     * @param jsonObject: JSONObject - oggetto JSON
+     * Ritorna l'oggetto che descrive le operazioni
+     * @return Operation
      */
-    @Deprecated("Serviva per la classe ManagerSharedClass che è deprecata anchessa")
-    abstract fun addInfoToSharedFile(jsonObject: JSONObject)
+    fun getOperation() : Operation{
+        return this.operation
+    }
+
+    /**
+     * Ritorna il NavGraph di questa estensione
+     * @return NavGraph
+     */
+    abstract fun getNavGraph(navController: NavController, loader: PathClassLoader, fragmentManager : FragmentManager, context: AppCompatActivity) : NavGraph
+
+    /**
+     * Immagine dell'estensione
+     * @return Bitmap
+     */
+    fun getImage() : Bitmap{
+        return img
+    }
+
+    fun setImage(img : Bitmap){
+        this.img = img
+    }
+
+    /**
+     * Titolo estensione
+     * @return String
+     */
+    abstract fun getTitle() : String
+
+    /**
+     * Descrizione estensione
+     * @return String
+     */
+    abstract fun getDescription() : String
 }
