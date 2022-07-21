@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">LoaderClass</string>
+    <string name="main_load">it.elsalamander.loaderclass</string>
+</resources>
