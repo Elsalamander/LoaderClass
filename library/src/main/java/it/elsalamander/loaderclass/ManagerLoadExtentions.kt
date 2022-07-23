@@ -102,9 +102,16 @@ class ManagerLoadExtentions(val activity : AppCompatActivity) {
                     //se sono qua è tutto ok
                     //il file apk in questione è una estensione valida
 
-
-                    //ora carica l'estensione
-                    this.loadExtension(this.moveToExtensionFolder(tmp, desc))
+                    //è già presente?
+                    if(!extentions.containsKey(desc.getString(DESC_PATH_NAME))){
+                        //non è presente
+                        //ora carica l'estensione
+                        this.loadExtension(this.moveToExtensionFolder(tmp, desc))
+                    }else{
+                        //è già presente questa estensione non caricare ed
+                        //elimina il file temp
+                        tmp.delete()
+                    }
 
                 }catch(e : EstensioneNotFound){
                     e.printStackTrace()
@@ -263,5 +270,19 @@ class ManagerLoadExtentions(val activity : AppCompatActivity) {
         return this.extentions
     }
 
+    fun removeExtension(name : String) : Boolean{
+        //rimuovi dalla mappa
+        this.extentions.remove(name)
+
+        //elimina il file
+        File(activity.filesDir, PATH_FOLDER_EXTENSION).listFiles()?.forEach {
+            Log.d("FILE", "NOMEDEL FILE: ${it.name}, da eliminare $name")
+            if(it.name == "$name.apk"){
+                it.delete()
+                return true
+            }
+        }
+        return false
+    }
 
 }

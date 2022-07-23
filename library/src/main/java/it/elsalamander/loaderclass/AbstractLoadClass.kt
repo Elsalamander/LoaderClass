@@ -3,6 +3,7 @@ package it.elsalamander.loaderclass
 import android.content.Context
 import android.graphics.Bitmap
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph
@@ -36,10 +37,11 @@ abstract class AbstractLoadClass(private val operation: Operation) {
     }
 
     /**
-     * Ritorna il NavGraph di questa estensione
-     * @return NavGraph
+     * Ritorna il fragment da aprire per questa estensione
+     * @param context: Context
+     * @return Fragment
      */
-    abstract fun getNavGraph(navController: NavController, loader: PathClassLoader, fragmentManager : FragmentManager, context: AppCompatActivity) : NavGraph
+    abstract fun getFragment(context: Context) : Fragment
 
     /**
      * Immagine dell'estensione
