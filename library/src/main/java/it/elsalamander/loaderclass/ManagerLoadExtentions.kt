@@ -3,7 +3,6 @@ package it.elsalamander.loaderclass
 import android.app.Activity
 import android.content.Intent
 import android.graphics.BitmapFactory
-import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.util.Log
 import androidx.activity.result.ActivityResult
@@ -106,7 +105,7 @@ class ManagerLoadExtentions(val activity : AppCompatActivity) {
                     if(!extentions.containsKey(desc.getString(DESC_PATH_NAME))){
                         //non è presente
                         //ora carica l'estensione
-                        this.loadExtension(this.moveToExtensionFolder(tmp, desc))
+                        this.loadExtension(this.moveToExtensionFolder(tmp, desc), true)
                     }else{
                         //è già presente questa estensione non caricare ed
                         //elimina il file temp
@@ -159,7 +158,7 @@ class ManagerLoadExtentions(val activity : AppCompatActivity) {
     /**
      * Carica l'estensione
      */
-    private fun loadExtension(file: File?) {
+    private fun loadExtension(file: File?, firstLoad : Boolean = false) {
         //crea il loader
         pathClassLoader = PathClassLoader(file!!.path, null, activity.classLoader)
 
@@ -169,8 +168,22 @@ class ManagerLoadExtentions(val activity : AppCompatActivity) {
         //ottieni la classe
         val cl = this.getExtensionClass(pathClassLoader, json)
 
+        //costruisci la classe
+        val builded = instanceExtension(cl, pathClassLoader)
         //inserisci nella mappa
-        this.extentions[json.getString(DESC_PATH_NAME)] = Pair(json, instanceExtension(cl, pathClassLoader))
+        this.extentions[json.getString(DESC_PATH_NAME)] = Pair(json, builded)
+
+        //esegui gli eventuali startUp
+        if(builded is OnStartUpExtension){
+            builded.doOnStartUp(activity as Holder, true)
+        }
+
+        //first load
+        if(firstLoad){
+            if(builded is OnFirstLoad){
+                builded.onFirstLoad(activity as Holder, activity)
+            }
+        }
     }
 
     /**
