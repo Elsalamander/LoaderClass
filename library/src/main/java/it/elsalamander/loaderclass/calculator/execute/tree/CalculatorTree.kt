@@ -49,7 +49,11 @@ class CalculatorTree {
             //controllare se il figlio dx è null
             if(currentNode!!.dx == null && !currentNode!!.hasNumber){
                 //sto inserendo un'altro operatore di seguito
-                currentNode!!.dx = Node(operator, currentNode)
+                if(operator.numArgs != 0){
+                    currentNode!!.dx = Node(operator, currentNode)
+                }else{
+                    this.add(operator.execute(null,null))
+                }
                 currentNode!!.dx
             }else{
                 if(currentNode!!.padre == null){

@@ -22,6 +22,18 @@ class OperationDataParameters(private val parameters: Map<String, Double?>, priv
     }
 
     /**
+     * Ritorna la prima chiave nulla se c'è altrimenti null
+     */
+    fun getFirstNullKey() : String?{
+        parameters.forEach{
+            if(it.value == null){
+                return it.key
+            }
+        }
+        return null
+    }
+
+    /**
      * Ritorna l'helper di base di questa Operation
      */
     fun getHelper() : OperationDataHelper{
