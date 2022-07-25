@@ -144,7 +144,14 @@ class Calculator(val extension : ManagerLoadExtentions) {
             subScan = Scanner(str)
             subScan.useDelimiter("=")
 
-            map[subScan.next()] = subScan.next().toDoubleOrNull()
+            val key = subScan.next()
+            val value = subScan.next()
+            if(value == "?" || value.toDoubleOrNull() != null){
+                map[key] = value.toDoubleOrNull()
+            }else{
+                map[key] = this.calc(value)
+            }
+
             subScan.close()
         }
         scan.close()
