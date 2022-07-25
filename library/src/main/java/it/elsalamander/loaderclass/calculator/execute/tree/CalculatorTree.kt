@@ -61,7 +61,7 @@ class CalculatorTree {
                     //ho due casi
                     //prio padre < dell'inserito
                     //prio padre > dell'inserito
-                    if(currentNode!!.padre!!.op!!.prio <= operator.prio){
+                    if(currentNode!!.padre!!.op!!.prio < operator.prio){
                         //inserisco al figlio destro
                         val tmp = Node(operator, currentNode!!.padre)
                         currentNode!!.padre!!.dx = tmp
@@ -72,11 +72,11 @@ class CalculatorTree {
                         //salgo di nodo finche non trovo un nodo la quale operazione
                         //ha una priorità più bassa
                         var tmp = currentNode!!.padre
-                        while(tmp!!.padre != null && tmp.padre!!.op!!.prio > operator.prio){
+                        while(tmp!!.padre != null && tmp.padre!!.op!!.prio >= operator.prio){
                             tmp = tmp.padre
                         }
                         //se non esiste un nodo con priorità piu bassa trovero
-                        if(tmp.padre == null && tmp.op!!.prio > operator.prio){
+                        if(tmp.padre == null && tmp.op!!.prio >= operator.prio){
                             tmp.padre = Node(operator, null)
                             root = tmp.padre
                         }else{
