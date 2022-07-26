@@ -5,6 +5,13 @@ import org.json.JSONException
 import org.json.JSONObject
 import java.io.*
 
+/****************************************************************
+ * Classe dove sono presenti funzioni statiche si supporto
+ *
+ * @author: Elsalamander
+ * @data: 14 luglio 2022
+ * @version: v1.0
+ ****************************************************************/
 class Util {
 
     companion object{

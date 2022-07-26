@@ -1,7 +1,12 @@
 package it.elsalamander.loaderclass
 
-import it.elsalamander.loaderclass.calculator.execute.Calculator
-
+/****************************************************************
+ * Interfaccia per specificare che l'estensione ha un startUp
+ *
+ * @author: Elsalamander
+ * @data: 14 luglio 2022
+ * @version: v1.0
+ ****************************************************************/
 interface OnStartUpExtension {
 
     /**

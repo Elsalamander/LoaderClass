@@ -2,7 +2,7 @@ package it.elsalamander.loaderclass.calculator.execute.tree
 
 import it.elsalamander.loaderclass.calculator.execute.operator.Operator
 
-/**
+/****************************************************************
  * Mappa per eseguire le operazioni
  * Incomincio con un nodo
  * Si crea la radice, che inizialmente contiene il primo numero o operazione
@@ -19,7 +19,10 @@ import it.elsalamander.loaderclass.calculator.execute.operator.Operator
  * Il put quindi è dato da:
  * - Numero
  * - Operazione: in questo caso viene tenuto conto la priorità per l'inserimento
- */
+ * @author: Elsalamander
+ * @data: 14 luglio 2022
+ * @version: v1.0
+ ****************************************************************/
 class CalculatorTree {
 
     var root : Node? = null

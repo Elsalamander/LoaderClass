@@ -1,5 +1,12 @@
 package it.elsalamander.loaderclass.calculator.execute
 
+/****************************************************************
+ * Builder per trasformare una stringa in un operatore
+ *
+ * @author: Elsalamander
+ * @data: 14 luglio 2022
+ * @version: v1.0
+ ****************************************************************/
 class OperatorBuilder{
 
     var doOperator = false

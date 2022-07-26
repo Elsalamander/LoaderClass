@@ -2,6 +2,13 @@ package it.elsalamander.loaderclass.calculator.execute
 
 import kotlin.math.pow
 
+/****************************************************************
+ * Builder per trasformare una stringa in un numero
+ *
+ * @author: Elsalamander
+ * @data: 14 luglio 2022
+ * @version: v1.0
+ ****************************************************************/
 class NumberBuilder {
 
     var doNumber = false        //Sto costruendo un numero?

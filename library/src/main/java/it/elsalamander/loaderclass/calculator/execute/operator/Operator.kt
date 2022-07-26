@@ -1,13 +1,12 @@
 package it.elsalamander.loaderclass.calculator.execute.operator
 
-import android.media.Image
 import it.elsalamander.loaderclass.calculator.execute.operator.set.Div
 import it.elsalamander.loaderclass.calculator.execute.operator.set.Less
 import it.elsalamander.loaderclass.calculator.execute.operator.set.Mul
 import it.elsalamander.loaderclass.calculator.execute.operator.set.Plus
 import java.util.*
 
-/**
+/****************************************************************
  * Ci sono diversi tipi di operatori, ogni operatore ha
  * Stringa identificativa: "+", "/", "ln", "sin", ...
  * Assegnato c'è un operatore che ha:
@@ -19,8 +18,10 @@ import java.util.*
  * "+" ; "-" ; "/" ; "*"
  *
  * Tutti i numeri e le () [] terminano l'operatore
- *
- */
+ * @author: Elsalamander
+ * @data: 14 luglio 2022
+ * @version: v1.0
+ ****************************************************************/
 abstract class Operator(val name : String, val prio : Int, val numArgs : Int) {
 
     companion object{

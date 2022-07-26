@@ -10,6 +10,13 @@ import it.elsalamander.loaderclass.calculator.execute.tree.CalculatorTree
 import java.util.*
 import kotlin.jvm.Throws
 
+/****************************************************************
+ * Classe per descrivere e realizzare la calcolatrice
+ *
+ * @author: Elsalamander
+ * @data: 14 luglio 2022
+ * @version: v1.0
+ ****************************************************************/
 class Calculator(val extension : ManagerLoadExtentions) {
 
     init{
@@ -18,7 +25,11 @@ class Calculator(val extension : ManagerLoadExtentions) {
 
     fun calc(expression : String) : Double{
         if(this.validate(expression)){
-            return exec(expression)
+            try{
+                return exec(expression)
+            }catch(e : InconsistentDataException){
+                return Double.NaN
+            }
         }
         return 0.0;
     }
@@ -91,17 +102,6 @@ class Calculator(val extension : ManagerLoadExtentions) {
             tree.add(doNumber.lastNumber)
         }
 
-
-        /*
-        tree.add(10.0)
-        tree.add(Operator.getOperator("/")!!)
-        tree.add(2.0)
-        tree.add(Operator.getOperator("*")!!)
-        tree.add(8.0)
-        tree.add(Operator.getOperator("/")!!)
-        tree.add(2.0)
-        */
-
         return tree.solve()
     }
 
@@ -156,7 +156,7 @@ class Calculator(val extension : ManagerLoadExtentions) {
         }
         scan.close()
 
-        var result = 0.0
+        var result = Double.NaN
         //ho la mappa chiave valore, ora devo eseguire la mappa
         //prima devo trovare l'estensione che risolve la possibile mappa
         extension.extentions.forEach {
