@@ -8,5 +8,4 @@ package it.elsalamander.loaderclass.calculator
  * @data: 14 luglio 2022
  * @version: v1.0
  ****************************************************************/
-class InconsistentDataException(msg : String) : RuntimeException(msg)  {
-}
+class InconsistentDataException(msg : String) : RuntimeException(msg)

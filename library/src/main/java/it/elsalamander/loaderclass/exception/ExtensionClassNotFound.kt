@@ -10,5 +10,4 @@ import java.lang.RuntimeException
  * @data: 14 luglio 2022
  * @version: v1.0
  ****************************************************************/
-class ExtensionClassNotFound(msg : String) : RuntimeException(msg) {
-}
+class ExtensionClassNotFound(msg : String) : RuntimeException(msg)

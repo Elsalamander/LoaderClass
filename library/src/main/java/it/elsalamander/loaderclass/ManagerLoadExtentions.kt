@@ -17,6 +17,7 @@ import org.json.JSONException
 import org.json.JSONObject
 import java.io.File
 import java.io.InputStream
+import java.lang.Exception
 import java.util.*
 
 
@@ -118,7 +119,10 @@ class ManagerLoadExtentions(val activity : AppCompatActivity) {
                 }catch(e : ExtensionClassNotFound){
                     e.printStackTrace()
                     return@registerForActivityResult
-                }catch(e : InvalidJSONDesc){
+                }catch(e : InvalidJSONDesc) {
+                    e.printStackTrace()
+                    return@registerForActivityResult
+                }catch (e : Exception){
                     e.printStackTrace()
                     return@registerForActivityResult
                 }finally{
@@ -149,6 +153,9 @@ class ManagerLoadExtentions(val activity : AppCompatActivity) {
                 e.printStackTrace()
                 it.delete()
             }catch(e : InvalidJSONDesc){
+                e.printStackTrace()
+                it.delete()
+            }catch(e : Exception){
                 e.printStackTrace()
                 it.delete()
             }

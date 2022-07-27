@@ -2,13 +2,11 @@ package it.elsalamander.loaderclass.calculator.execute
 
 import it.elsalamander.loaderclass.ManagerLoadExtentions
 import it.elsalamander.loaderclass.calculator.InconsistentDataException
-import it.elsalamander.loaderclass.calculator.Operation
-import it.elsalamander.loaderclass.calculator.data.OperationData
 import it.elsalamander.loaderclass.calculator.data.OperationDataParameters
 import it.elsalamander.loaderclass.calculator.execute.operator.Operator
 import it.elsalamander.loaderclass.calculator.execute.tree.CalculatorTree
+import java.lang.Exception
 import java.util.*
-import kotlin.jvm.Throws
 
 /****************************************************************
  * Classe per descrivere e realizzare la calcolatrice
@@ -29,9 +27,11 @@ class Calculator(val extension : ManagerLoadExtentions) {
                 return exec(expression)
             }catch(e : InconsistentDataException){
                 return Double.NaN
+            }catch(e : Exception){
+                return Double.NaN
             }
         }
-        return 0.0;
+        return 0.0
     }
 
     /**

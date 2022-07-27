@@ -2,17 +2,8 @@ package it.elsalamander.loaderclass
 
 import android.content.Context
 import android.graphics.Bitmap
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
-import androidx.navigation.NavController
-import androidx.navigation.NavGraph
-import dalvik.system.PathClassLoader
 import it.elsalamander.loaderclass.calculator.Operation
-import it.elsalamander.loaderclass.calculator.data.OperationDataHelper
-import it.elsalamander.loaderclass.calculator.data.OperationDataParameters
-import it.elsalamander.loaderclass.calculator.data.OperationDataResult
-import org.json.JSONObject
 
 /****************************************************************
  * Classe astratta che definisce la interfaccia pubblica delle

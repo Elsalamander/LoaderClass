@@ -1,11 +1,9 @@
 package it.elsalamander.loaderclass.calculator
 
-import android.util.Log
 import it.elsalamander.loaderclass.calculator.data.OperationDataHelper
 import it.elsalamander.loaderclass.calculator.data.OperationDataParameters
 import it.elsalamander.loaderclass.calculator.data.OperationDataResult
 import org.json.JSONObject
-import kotlin.jvm.Throws
 
 /****************************************************************
  * Interfaccia che serve per definire le funzioni che devono essere

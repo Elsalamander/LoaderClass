@@ -9,5 +9,4 @@ import java.lang.RuntimeException
  * @data: 14 luglio 2022
  * @version: v1.0
  ****************************************************************/
-class EstensioneNotFound(msg : String) : RuntimeException(msg) {
-}
+class EstensioneNotFound(msg : String) : RuntimeException(msg)
