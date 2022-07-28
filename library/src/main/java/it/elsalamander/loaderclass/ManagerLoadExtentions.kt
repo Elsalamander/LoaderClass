@@ -5,6 +5,7 @@ import android.content.Intent
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -115,15 +116,19 @@ class ManagerLoadExtentions(val activity : AppCompatActivity) {
 
                 }catch(e : EstensioneNotFound){
                     e.printStackTrace()
+                    Toast.makeText(activity, "Errore: estensione non valida 0x01", Toast.LENGTH_SHORT).show()
                     return@registerForActivityResult
                 }catch(e : ExtensionClassNotFound){
                     e.printStackTrace()
+                    Toast.makeText(activity, "Errore: estensione non valida 0x02", Toast.LENGTH_SHORT).show()
                     return@registerForActivityResult
                 }catch(e : InvalidJSONDesc) {
                     e.printStackTrace()
+                    Toast.makeText(activity, "Errore: estensione non valida 0x03", Toast.LENGTH_SHORT).show()
                     return@registerForActivityResult
-                }catch (e : Exception){
+                }catch(e : Exception){
                     e.printStackTrace()
+                    Toast.makeText(activity, "Errore: estensione non valida 0x04", Toast.LENGTH_SHORT).show()
                     return@registerForActivityResult
                 }finally{
                     //in ogni caso alla fine elimina il file
@@ -148,15 +153,19 @@ class ManagerLoadExtentions(val activity : AppCompatActivity) {
                 }
             }catch(e : EstensioneNotFound){
                 e.printStackTrace()
+                Toast.makeText(activity, "Errore: estensione non valida 0x01", Toast.LENGTH_SHORT).show()
                 it.delete()
             }catch(e : ExtensionClassNotFound){
                 e.printStackTrace()
+                Toast.makeText(activity, "Errore: estensione non valida 0x02", Toast.LENGTH_SHORT).show()
                 it.delete()
             }catch(e : InvalidJSONDesc){
                 e.printStackTrace()
+                Toast.makeText(activity, "Errore: estensione non valida 0x03", Toast.LENGTH_SHORT).show()
                 it.delete()
             }catch(e : Exception){
                 e.printStackTrace()
+                Toast.makeText(activity, "Errore: estensione non valida 0x04", Toast.LENGTH_SHORT).show()
                 it.delete()
             }
         }
@@ -190,6 +199,9 @@ class ManagerLoadExtentions(val activity : AppCompatActivity) {
             if(builded is OnFirstLoad){
                 builded.onFirstLoad(activity as Holder, activity)
             }
+
+            //tutto andato a buon fine per il primo caricamento
+            Toast.makeText(activity, "Estensione caricata!!", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -299,9 +311,11 @@ class ManagerLoadExtentions(val activity : AppCompatActivity) {
             Log.d("FILE", "NOMEDEL FILE: ${it.name}, da eliminare $name")
             if(it.name == "$name.apk"){
                 it.delete()
+                Toast.makeText(activity, "Estensione rimossa!!", Toast.LENGTH_SHORT).show()
                 return true
             }
         }
+        Toast.makeText(activity, "Errore: Estensione non trovata 0x05!!", Toast.LENGTH_SHORT).show()
         return false
     }
 

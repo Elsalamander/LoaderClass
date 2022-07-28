@@ -23,12 +23,12 @@ class Calculator(val extension : ManagerLoadExtentions) {
 
     fun calc(expression : String) : Double{
         if(this.validate(expression)){
-            try{
-                return exec(expression)
+            return try{
+                exec(expression)
             }catch(e : InconsistentDataException){
-                return Double.NaN
+                Double.NaN
             }catch(e : Exception){
-                return Double.NaN
+                Double.NaN
             }
         }
         return 0.0
@@ -100,6 +100,11 @@ class Calculator(val extension : ManagerLoadExtentions) {
         if(doNumber.doNumber){
             doNumber.reset()
             tree.add(doNumber.lastNumber)
+        }
+
+        if(doOp.doOperator){
+            doOp.reset()
+            tree.add(Operator.getOperator(doOp.lastOperator)!!)
         }
 
         return tree.solve()
